@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title></title>
+        <style type="text/css">
+            *{color: #838383;margin: 0;padding: 0}
+            html,body {font-size: 12px;overflow: hidden; }
+
+            .atwho-input { vertical-align: middle;}
+            .edui-for-atwho.edui-default .edui-popup-content { height: 37px;width: 180px;max-height: 36px;overflow-x:hidden;overflow-y: hidden;}
+        </style>
+    </head>
+    <body>
+        <div class="content" style="padding-top: 10px;">
+            <input type="checkbox" name="atwho" class="atwho-input" id="atwho" checked="checked" ><label for="atwho" style="vertical-align: middle;margin-left: 5px;">启用键盘@功能</label>
+        </div>
+        <script type="text/javascript" src="../../dialogs/internal.js"></script>
+        <script type="text/javascript">
+            var anchorInput = $G('atwho');
+            anchorInput.onchange = function (evt) {
+                evt = evt || window.event;
+                editor.execCommand('atwho', this.checked);
+                domUtils.preventDefault(evt)
+            };
+        </script>
+    </body>
+</html>

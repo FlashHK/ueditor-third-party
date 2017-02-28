@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>完整demo</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script type="text/javascript" charset="utf-8" src="../third-party/jquery-1.10.2.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../third-party/jquery.form.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../third-party/atwho/jquery.atwho.css">
+    <script type="text/javascript" charset="utf-8" src="../third-party/atwho/jquery.atwho.js"></script>
+
+    <script type="text/javascript" charset="utf-8" src="../ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="editor_api.js"></script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" charset="utf-8" src="../lang/zh-cn/zh-cn.js"></script>
+    <!--添加按钮-->
+    <script type="text/javascript" charset="utf-8" src="addCustomizeButton.js"></script>
+    <!--添加下拉菜单-->
+    <script type="text/javascript" charset="utf-8" src="addCustomizeCombox.js"></script>
+    <!--添加弹出层-->
+    <script type="text/javascript" charset="utf-8" src="addCustomizeDialog.js"></script>
+    <!--atwho插件-->
+    <script type="text/javascript" charset="utf-8" src="editor-atwho/index.js"></script>
+    <!--插入word插件-->
+    <script type="text/javascript" charset="utf-8" src="editor-word/index.js"></script>
+    <!--插入excel插件-->
+    <script type="text/javascript" charset="utf-8" src="editor-excel/index.js"></script>
+
+    <style type="text/css">
+        .clear {
+            clear: both;
+        }
+
+    </style>
+</head>
+<body>
+<div>
+    <h1>二次开发demo</h1>
+    <script id="editor" type="text/plain" style="width:500px;height:500px;"></script>
+</div>
+</body>
+<script type="text/javascript">
+    // 实例化@插件
+    EditorAtwho({
+        // 支持所有atwho插件的参数
+        header: '请选择', //如果不需要可以去掉
+//        data: data, //这里可以添加默认数据
+        url: 'http://mail.oa.com/func/view.aspx?groupid=mail&act=contact_search&search=',
+        /**
+         * 这里处理ajax返回的数据，进行一些必要的数据转换
+         * @param data
+         * @returns {object}
+         */
+        parsed: function (data) {
+            try {
+                data = eval(data);
+            } catch (err) {
+            }
+            data = data.map(function (item) {
+                if(item){
+                    return {
+                        id: item[1], //数据必须带有id字段，后端可以通过匹配 @{id:1} 找到对应的用户
+                        name: item[0], //插入到编辑器的内容
+                        display: item[0] + '<' + item[1] + '>' // 需要再下拉列表显示的内容
+                    }
+                }
+            })
+            return data;
+        }
+    })
+
+    // 实例化word插件
+    EditorWord({
+        // 这接口只是为了演示，真实接口需要将word文件转换为html返回来
+        url: 'http://mail.oa.com/func/func.aspx?groupid=mail&act=uploadword',
+        /**
+         * 匹配文件后缀的规则，可以不进行匹配
+         * @param name 文件后缀名
+         * @returns {boolean}
+         */
+        match: function (name) {
+            if (!name.match(/\.doc{0,1}$/ig)) {
+                alert('请选择正确的文件格式');
+                return false;
+            }
+            if (name === '') return false;
+            return true;
+        }
+    })
+
+    // 实例化xcel插件
+    EditorExcel({
+        // 这接口只是为了演示，真实接口需要将excel文件转换为html返回来
+        url: 'http://mail.oa.com/func/func.aspx?groupid=mail&act=uploadexcel',
+        /**
+         * 匹配文件后缀的规则，可以不进行匹配
+         * @param name 文件后缀名
+         * @returns {boolean}
+         */
+        match: function (name) {
+            if (!name.match(/\.xlsx{0,1}$/ig)) {
+                alert('请选择正确的文件格式');
+                return false;
+            }
+            if (name === '') return false;
+            return true;
+        }
+    })
+
+    //实例化编辑器
+    //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+    UE.getEditor('editor', {
+        //清空了工具栏
+        toolbars: [['|', 'atwho']]
+    })
+
+</script>
+</html>

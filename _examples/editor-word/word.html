@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <style type="text/css">
+        * {
+            color: #838383;
+            margin: 0;
+            padding: 0
+        }
+
+        html, body {
+            font-size: 12px;
+            overflow: hidden;
+        }
+
+        .content {
+            padding: 10px;
+        }
+
+        .edui-button-body {
+            background: url("./icons-all.gif") no-repeat;
+            height: 24px;
+            width: 96px;
+            font-size: 12px;
+            line-height: 24px;
+            text-align: center;
+            cursor: default;
+            margin-top: 20px;
+        }
+
+        .edui-button-body:hover {
+            background: url("./icons-all.gif") no-repeat 0 -30px;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <form id="wordForm" style="display: block;" method="post" enctype="multipart/form-data">
+        <div style="color:Gray">
+            提示:对您选择的Word文档，我们会把内容按照原有格式，添加到编辑栏内。目前仅支持Word文档格式。
+        </div>
+        <br>
+        <input type="file" id="wordFile" name="wordFile" accept="application/msword">
+        <div unselectable="on" class="edui-button-body edui-default" onclick="submitFile(this)">
+            <div class="edui-box edui-icon edui-default"></div>
+            <div class="edui-box edui-label edui-default">确认添加</div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="../../dialogs/internal.js"></script>
+<script type="text/javascript">
+    var wordForm = $G('wordForm');
+
+    function submitFile() {
+        editor.execCommand('word', wordForm);
+    }
+</script>
+</body>
+</html>
